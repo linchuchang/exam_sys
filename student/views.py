@@ -1,7 +1,7 @@
 import requests.cookies
 from django.shortcuts import render, redirect
 from django import forms
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .forms import UserForm, Register_Student_Form, Register_Teacher_Form
 from student import models
 import os
@@ -9,6 +9,7 @@ import re
 from random import Random
 from djangoProject1 import settings
 from django.core.mail import send_mail
+from django.core import serializers
 import json
 # Create your views here.
 
@@ -76,8 +77,6 @@ def register(request):
         return render(request, 'student/register.html', locals())
     elif request.method == 'POST':
         register_form = Register_Student_Form(request.POST)
-        print(request.POST)
-        print(register_form)
         if register_form.is_valid():
             # 获取数据
             email = register_form.cleaned_data['email']
@@ -302,4 +301,15 @@ def verify(request):
 
 # 配置试卷
 def makepaper(request):
-    return render(request, 'makepaper.html')
+    if request.method == 'GET':
+        return render(request, 'makepaper.html')
+    else:
+        subject = request.POST.get("options")
+        tests = models.Test_Questions.objects.filter(subject=subject)
+        print(tests)
+        data = []
+        for test in tests:
+            json_dict = {}
+            json_dict['title'] = test.title
+            data.append(json_dict)
+        return JsonResponse(data, safe=False)

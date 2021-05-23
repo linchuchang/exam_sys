@@ -9,6 +9,8 @@
     {% block title %}
         <title>试卷配置</title>
         <link rel="stylesheet" />
+        <script type="text/javascript" src="{% static 'JS/get_testTitle.js' %}"></script>
+        <script type="text/javascript" src="{% static 'JS/get_testTitle.js' %}"></script>
     {% endblock %}
 
 </head>
@@ -24,9 +26,10 @@
             <b><i><h5 align="center">试卷配置</h5></i></b>
         <div class="mt-4" style="margin-left: 100px">
             <form name="makepaper" action="" class="mt-4">
-                考试科目:<select name="subject">
+                考试科目:<select name="subject" id="select" onchange="select_change()">
+                <option value="" selected="">---------</option>
                 <option value="math">数学</option>
-                <option value=" ">文学</option>
+                <option value=" ">教育知识与能力</option>
                 <option value=" ">英语</option>
                 <option value=" ">政治</option>
             </select><br/><br/>
@@ -34,20 +37,27 @@
                 考试时间:<input type="time" name="papertime"><br/><br/>
                 试题数目:<input type="number" name="papercount" min="5" max="20" value="10"><br/><br/>
                 试卷名称:<input type="text" name="papername"><br/><br/>
+                使用专业:<input type="text" name="major-available"><br/><br/>
                 <input type="submit" value="生成试卷" class="align-center">
             </form>
         </div>
         </td>
 
         <td align="center"rowspan="2">
-            <div class="mt-4" style="margin-left: 100px" >
-                <h5>上海大学教师系统登录</h5>
-             <iframe src="https://newsso.shu.edu.cn/login/eyJ0aW1lc3RhbXAiOjE2MjE2NzU4MjgzMjI3NjMzOTEsInJlc3BvbnNlVHlwZSI6ImNvZGUiLCJjbGllbnRJZCI6IlJWVjFtWmptbnhrcFlZVTg5Q2kxc3RwcCIsInNjb3BlIjoiIiwicmVkaXJlY3RVcmkiOiJodHRwczovL3BpbS5zaHUuZWR1LmNuL2luZm9wbHVzL2xvZ2luP3JldFVybD1odHRwcyUzQSUyRiUyRnBpbS5zaHUuZWR1LmNuJTJGaW5mb3BsdXMlMkZvYXV0aDIlMkZhdXRob3JpemUlM0Z4X3JlZGlyZWN0ZWQlM0R0cnVlJTI2c2NvcGUlM0Rwcm9maWxlJTJCcHJvZmlsZV9lZGl0JTJCYXBwJTJCdGFzayUyQnByb2Nlc3MlMkJzdWJtaXQlMkJwcm9jZXNzX2VkaXQlMkJ0cmlwbGUlMkJzeXNfc3RhdHMlMjZyZXNwb25zZV90eXBlJTNEY29kZSUyNnJlZGlyZWN0X3VyaSUzRGh0dHBzJTI1M0ElMjUyRiUyNTJGcGltLnNodS5lZHUuY24lMjUyRnRhc2tjZW50ZXIlMjUyRndhbGwlMjUyRmVuZHBvaW50JTI1M0ZyZXRVcmwlMjUzRGh0dHBzJTI1MjUzQSUyNTI1MkYlMjUyNTJGcGltLnNodS5lZHUuY24lMjUyNTJGdGFza2NlbnRlciUyNTI1MkZ3b3JrZmxvdyUyNTI1MkZpbmRleCUyNmNsaWVudF9pZCUzRDE2NDBlMmU0LWYyMTMtMTFlMy04MTVkLWZhMTYzZTkyMTViYiIsInN0YXRlIjoiNDZlYmMzIn0=" width="800" height="700"></iframe>
-
+            <div class="mt-4" style="margin-left: 100px;">
+            <select name="pid" required="" id="id_pid" multiple="">
+                {% for test in tests %}
+                    <option value="">&lt;test&gt;</option>
+                {% endfor %}
+            </select>
             </div>
+{#            <div class="mt-4" style="margin-left: 100px" >#}
+{#                <h5>上海大学教师系统登录</h5>#}
+{#             <iframe src="https://newsso.shu.edu.cn/login/eyJ0aW1lc3RhbXAiOjE2MjE2NzU4MjgzMjI3NjMzOTEsInJlc3BvbnNlVHlwZSI6ImNvZGUiLCJjbGllbnRJZCI6IlJWVjFtWmptbnhrcFlZVTg5Q2kxc3RwcCIsInNjb3BlIjoiIiwicmVkaXJlY3RVcmkiOiJodHRwczovL3BpbS5zaHUuZWR1LmNuL2luZm9wbHVzL2xvZ2luP3JldFVybD1odHRwcyUzQSUyRiUyRnBpbS5zaHUuZWR1LmNuJTJGaW5mb3BsdXMlMkZvYXV0aDIlMkZhdXRob3JpemUlM0Z4X3JlZGlyZWN0ZWQlM0R0cnVlJTI2c2NvcGUlM0Rwcm9maWxlJTJCcHJvZmlsZV9lZGl0JTJCYXBwJTJCdGFzayUyQnByb2Nlc3MlMkJzdWJtaXQlMkJwcm9jZXNzX2VkaXQlMkJ0cmlwbGUlMkJzeXNfc3RhdHMlMjZyZXNwb25zZV90eXBlJTNEY29kZSUyNnJlZGlyZWN0X3VyaSUzRGh0dHBzJTI1M0ElMjUyRiUyNTJGcGltLnNodS5lZHUuY24lMjUyRnRhc2tjZW50ZXIlMjUyRndhbGwlMjUyRmVuZHBvaW50JTI1M0ZyZXRVcmwlMjUzRGh0dHBzJTI1MjUzQSUyNTI1MkYlMjUyNTJGcGltLnNodS5lZHUuY24lMjUyNTJGdGFza2NlbnRlciUyNTI1MkZ3b3JrZmxvdyUyNTI1MkZpbmRleCUyNmNsaWVudF9pZCUzRDE2NDBlMmU0LWYyMTMtMTFlMy04MTVkLWZhMTYzZTkyMTViYiIsInN0YXRlIjoiNDZlYmMzIn0=" width="800" height="700"></iframe>#}
+{##}
+{#            </div>#}
         </td>
     </tr>
-
     <tr>
         <td bgcolor="#f0e68c">
             <div class="mt-4" style="margin-left: 100px">
