@@ -38,5 +38,6 @@ urlpatterns = [
     # 验证码发送
     path('register_s/verify/', views.verify, name="verify"),
     # 配置试卷
-    path('makepaper/', views.makepaper, name="makepaper")
+    path('makepaper/', views.makepaper, name="makepaper"),
+    path('create_paper/', views.create_Paper, name="create_paper"),
 ]

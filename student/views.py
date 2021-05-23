@@ -156,13 +156,10 @@ def exam(request):
     if request.method == 'POST':
         score = 0
         answer = request.POST
-        # print(answer)
-        # print(id)
         for i in range(n):
             # id_temp = id[i]
             if answer[str(i+1)] == questiones[i].answer:
                 score = score + questiones[i].score
-
         return render(request, 'calGrade.html', {'score': score})
 
 def calGrade(request):
@@ -311,5 +308,36 @@ def makepaper(request):
         for test in tests:
             json_dict = {}
             json_dict['title'] = test.title
+            json_dict['id'] = test.Question_number
             data.append(json_dict)
         return JsonResponse(data, safe=False)
+#生成试卷
+def create_Paper(request):
+    if request.method == 'GET':
+        return render(request, 'makepaper.html')
+    else:
+        # 获取数据
+        subject = request.POST.get('subject')
+        paperdate = request.POST.get('paperdate')
+        papertime = request.POST.get('papertime')
+        papercount = request.POST.get('papercount')
+        papername = request.POST.get('papername')
+        major_available = request.POST.get('major-available')
+        pid = request.POST.getlist('pid')
+        # 将时间格式转为YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ]
+        time = paperdate + ' ' + papertime
+        # 获得创建试卷的老师对象
+        identity = request.COOKIES.get('identity')
+        username = request.COOKIES.get('username')
+        if identity == 'teacher':
+            teacher = models.Teacher.objects.filter(name=username).first()
+            paper = models.Paper.objects.create(papername=papername, tid=teacher, subject=subject,
+                                                major=major_available, examtime=time)
+            paper.pid.set(pid)
+            message = '试卷已经创建成功'
+
+        else:
+            message = '学生无法创建试卷'
+        return render(request, 'makepaper.html', locals())
+
+

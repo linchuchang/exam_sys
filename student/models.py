@@ -64,18 +64,18 @@ class Test_Questions(models.Model):
 class Paper(models.Model):
     #题号pid 和题库为多对多的关系
     pid = models.ManyToManyField(Test_Questions)#多对多
+    papername = models.CharField('试卷名称', max_length=64, default='')
     tid = models.ForeignKey(Teacher, on_delete=models.CASCADE)#添加外键
     subject = models.CharField('科目', max_length=20, default='')
     major = models.CharField('考卷适用专业', max_length=20)
     examtime = models.DateTimeField()
-
 
     class Meta:
         db_table = 'paper'
         verbose_name = '试卷'
         verbose_name_plural = verbose_name
     def __str__(self):
-        return self.major;
+        return self.papername;
 
 
 
