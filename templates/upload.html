@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    <title>上传试题</title>
+{% endblock %}
+
+{% block mainbody %}
+    <form id="upload-form1" action="/upload/" method="post" enctype="multipart/form-data" >
+    　　　<input type="file" id="upload" name="upload"/> <br />
+    　　　<input type="submit" class="mt-4" value="Upload" />
+          <input type="hidden" name="method" value="first">
+    </form>
+    <div class="mt-4" style="margin: auto; margin-left: 50px">
+        <span class="checkbox_font  alert-warning" style="color: #f66495">{{ message }}</span>
+    </div>
+
+    <div class="mt-4" style="margin-left: 100px">
+        <form id="upload-form2" action="/upload/" method="post" onsubmit="return checkNull()">
+            科目<input type="text" name="subject" class="notNull" msg="科目"><span id="subjectInfo"></span>
+            <br><br>
+
+            题目<input type="text" name="title" class="notNull" msg="题目"><span id="titleInfo"></span>
+            <br><br>
+            A选项<input type="text" name="optionA" class="notNull" msg="A选项"><span id="optionAInfo"></span>
+            <br><br>
+            B选项<input type="text" name="optionB" class="notNull" msg="B选项"><span id="optionBInfo"></span>
+            <br><br>
+            C选项<input type="text" name="optionC" class="notNull" msg="C选项"><span id="optionCInfo"></span>
+            <br><br>
+            D选项<input type="text" name="optionD" class="notNull" msg="D选项"><span id="optionDInfo"></span>
+            <br><br>
+            难度<select name="difficulty" class="notNull" msg="难度">
+                <option value="easy">简单</option>
+                <option value="general">中等</option>
+                <option value="difficult">困难</option>
+            </select>
+            <span id="difficultyInfo"></span>
+            <br /><br>
+            答案
+            <input type="radio" value="A" name="answer" class="notNull" msg="答案">A</td>
+            <input type="radio" value="B" name="answer">B</td>
+            <input type="radio" value="C" name="answer">C</td>
+            <input type="radio" value="D" name="answer">D</td>
+            <span id="answerInfo"></span>
+            <br><br>
+            分数<input type="number" name="full-score" class="notNull" msg="分数">
+            <span id="full-scoreInfo"></span>
+            <br><br>
+            <input class="btn btn-success" type="submit" value="提交">
+            <input type="hidden" name="method" value="second">
+        </form>
+        <script type="text/javascript">
+            function checkNull()
+            {
+                 var num=0;
+                 $("span[id$='Info']").text("")
+                 //进行text类型的input非空验证
+                 $("input[type$='text']").each(function(n){
+                      if($(this).val()=="")
+                      {
+                           num++;
+                           var id_name = "#"+$(this).attr("name") + "Info"
+                           $(id_name).text($(this).attr("msg")+"不能为空！")
+                          $(id_name).css({fontSize:"10px",color:"red"})
+                      }
+                 });
+                 //进行单选框 input的非空验证
+                 $("input[type$='radio'][class$='notNull']").each(function (n){
+                     if($('input[name="answer"]:checked').size()<1)
+                     {
+                         num++;
+                         var id_name = "#"+$(this).attr("name") + "Info"
+                           $(id_name).text($(this).attr("msg")+"不能为空！")
+                         $(id_name).css({fontSize:"10px",color:"red"})
+                     }
+                 })
+
+                $("input[type$='number']").each(function (n){
+                    if($(this).val()=="")
+                    {
+                        num++;
+                        var id_name = "#"+$(this).attr("name") + "Info"
+                        $(id_name).text($(this).attr("msg")+"不能为空！")
+                        $(id_name).css({fontSize:"10px",color:"red"})
+                    }
+                })
+
+
+                 if(num>0)
+                 {
+                      return false;
+                 }
+                 else
+                 {
+                      return true;
+                 }
+            }
+        </script>
+    </div>
+{% endblock %}

@@ -1,0 +1,87 @@
+{%extends "base.html" %}
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% block title %}
+    <title>注册</title>
+    <script type="text/javascript" src="{% static 'JS/valid.js' %}"></script>
+    {% endblock %}
+</head>
+<body>
+{% block mainbody %}
+ <div class="title-line">
+    <span class="tit" style="font: caption; font-size: 38px">注册</span>
+</div>
+<!--标题结束-->
+
+
+<!--登录界面开始-->
+<div class="login-box">
+    <!--登录界面左开始-->
+    <div class="col-6" style="float:left; width: 489px">
+        <div class="login-leftbg" id="loginLeftbg">
+
+        </div>
+
+    </div>
+    <!--登录界面左结束-->
+
+    <!--登录表单开始 右界面-->
+    <div class="container">
+            <div class="col-6", style="float:right; margin-top: 0px;">
+                <div class="col" style="margin-left: 120px">
+                    <span class="heading" >用户注册</span>
+                </div>
+                <br>
+            <div>
+                <a href="/register_s/">学生注册 </a>
+                <a href="/register_t/">教师注册 </a>
+            </div>
+                <form method="post" action="/register_s/" class="form-horizontal" id="register_form">
+                <div class="form-group">
+                {% for field in register_form %}
+                    {% if field.label  == '邮箱' %}
+                        <div class="mt-4">
+                            邮箱:<input type="email" name="email" id="email-input">
+                            <input type="button" onclick="" value="发送验证码" id="send-email" disabled>
+                            <span id="smscode_info" class="res-error"></span>
+                        </div>
+                        <div class="mt-4">
+                            验证码:<input type="text" id="valid-get">
+                        <span id="valid-info" class="res-error"></span>
+                        </div>
+
+                    {% else %}
+                    <div class="col-lg-10">
+                        {{field.label_tag}}
+                        {{ field }}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+
+                <div class="mycheckbox checkbox col-lg-10">
+                    <div class="checkbox" style="display: inline">
+                        <input type="checkbox" class="col-lg-1" style="vertical-align:middle"></input>
+                        <span class="checkbox_font">记住密码</span>
+                    </div>
+                </div>
+                <div class="mt-4" style="margin: auto">
+                    <span class="checkbox_font  alert-warning" style="color: #f66495">{{ message }}</span>
+                </div>
+                <div class="col-lg-10 mt-4">
+                    <button type="button" class="btn btn-success col-lg-12" id="register">注册</button>
+                </div>
+            </div>
+            </form>
+            </div>
+            </div>
+    <!--登录表单结束-->
+</div>
+    <script>
+</script>
+    {% endblock %}
+</body>
+</html>

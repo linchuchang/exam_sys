@@ -1,0 +1,79 @@
+{%extends "base.html" %}
+<!DOCTYPE HTML>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% block title %}
+    <title>在线答题考试系统</title>
+    <link rel="stylesheet" href="{% static 'css/exam.css' %}">
+    <script type="text/javascript" src="{% static 'JS/count_down.js' %}"></script>
+    {% endblock %}
+
+</head>
+<body>
+{% block mainbody %}
+<nav class="navbar navbar-expand-sm bg-light navbar-light ">
+    <ul class="navbar-nav">
+        <li class="nav-item active">
+            <a class="nav-link"><h3>在线考试系统</h3></a>
+        </li>
+
+        <li class="nav-item active">
+            <a class="nav-link"><h3>当前科目</h3></a>
+        </li>
+        <li style="position: fixed;right: 70px; font-size: 30px;color: #9fcdff"></li>
+
+    </ul>
+</nav>
+<div class="main" style="text-align: center">
+	<!--nr start-->
+	<div class="test_main">
+		<div class="nr_left">
+			<div class="test">
+                <div class="test_content">
+                    <div class="test_content_title">
+                        <h1>单选题</h1>
+                        <div>
+                            <div class="main">
+                            <span>共</span><i class="content_lit">10</i><span>题，</span>
+                            <span>合计</span><i class="content_fs">100</i><span>分</span>
+                                </div>
+                        </div>
+                        </div>
+                </div>
+            <h3 id="show"><span></span>小时<span></span>分<span></span>秒</h3>
+
+    <form action="/exam/" method="post">
+        <div class="test_title">
+
+        </div>
+    {% for item in questiones %}
+        <div>
+    <tr>
+        <td>({{ item.score }} 分){{ forloop.counter }}、{{item.title}}</td><br>
+        <td>{{item.optionA}}</td><br>
+        <td>{{item.optionB}}</td><br>
+        <td>{{item.optionC}}</td><br>
+        <td>{{item.optionD}}</td><br>
+    </tr>
+    <tr>
+        <td><input type="radio" name="{{ forloop.counter }}" value="A">A</td>
+        <td><input type="radio" name="{{ forloop.counter }}" value="B">B</td>
+        <td><input type="radio" name="{{ forloop.counter }}" value="C">C</td>
+        <td><input type="radio" name="{{ forloop.counter }}" value="D">D</td>
+        <br>
+    </tr>
+</div>
+    {% endfor %}
+    <input class="btn btn-success" type="submit" name="exam" value="交卷">
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,120 @@
+{%extends "base.html" %}
+{% load static %}
+{% block title %}
+    <title>编辑用户信息</title>
+    <style>
+        button {
+            width: 200px; /*设置按钮宽度*/
+            height: 30px; /*设置按钮高度*/
+            color: white; /*字体颜色*/
+            background-color: #b9def0; /*按钮背景颜色*/
+            border-radius: 3px; /*让按钮变得圆滑一点*/
+            border-width: 0; /*消去按钮丑的边框*/
+            margin: 0;
+            outline: none; /*取消轮廓*/
+            font-family: KaiTi, serif; /*字体设置为楷体*/
+            font-size: 17px; /*设置字体大小*/
+            text-align: center; /*字体居中*/
+            cursor: pointer; /*设置鼠标箭头手势*/
+        }
+
+        button:hover { /*鼠标移动时的颜色变化*/
+            background-color: antiquewhite;
+        }
+    </style>
+{% endblock %}
+
+{% block links %}
+    <link rel="stylesheet" type="text/css" href="">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,600,700,700i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Crimson+Text:400,700,700i|Josefin+Sans:700" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <script type="text/javascript" src="{% static 'JS/profile_edit.js' %}"></script>
+{% endblock %}
+
+<body>
+{% block mainbody %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="container main">
+        <div class="row home">
+            <div id="index_left" class="col-md-6 left">
+
+            </div>
+        <form action="/profile_edit/" method="post">
+            <div id="index_right" class="col-md-6 text-center right">
+                <div style="position: absolute;top: 120px;left: 30px;text-align: center;">
+                    <p class="home-description">
+                        昵称：<label>
+                        <input name="username" class="edit" type="text" value="{{ user.name }}">
+                    </label>
+                    </p>
+
+                    <p class="student-description">
+                        学号：<label>
+                        <input name="number" class="edit" type="text" value="{{ user.student_number }}">
+                    </label>
+                    </p>
+
+                    <p class="teacher-description">
+                        教工号：<label>
+                        <input name="number" type="text" class="edit" value="{{ user.Teacher_number }}">
+                    </label>
+                    </p>
+                    <p class="student-description">
+                        年级：<label>
+                        <input name="grade" type="text" class="edit" value="{{ user.grade }}">
+                    </label>
+                    </p>
+
+                    <p class="home-description">
+                        邮箱：<label>
+                        <input name="email" type="text" readonly="readonly" value="{{ user.email }}">
+                    </label>
+                    </p>
+
+                    <p class="home-description">
+                        性别：<label>
+                        <input name="sex" type="text"  class="edit" value="{{ user.sex }}">
+                    </label>
+                    </p>
+
+                    <p class="student-description">
+                        专业名称：<label>
+                        <input name="major" type="text" class="edit" value="{{ user.major }}">
+                    </label>
+                    </p>
+                </div>
+
+                <p style="position: absolute; left: 100px;top: 500px;" class="center">
+                    <button type="submit" value="提交">提交</button>
+                </p>
+
+            </div>
+        </form>
+                <p style="position: absolute; left: 100px;top: 530px;" class="center">
+                    <input type="button" value="编辑" class="btn btn-success" onclick="edit_unable()"></input>
+                </p>
+                <p style="" class="center">
+                    <input id="cancel" type="button" value="完成" style="display: none" class="btn btn-success" onclick="edit_able()"></input>
+                </p>
+
+        </div>
+    </div>
+    </div>
+</form>
+<script type="text/javascript">
+    function edit_unable(){
+        $("input[class$='edit']").attr('readOnly', false);
+        $("#cancel").css('display', 'block');
+    }
+
+    function edit_able(){
+        $("input[class$='edit']").attr('readOnly', true);
+        $("#cancel").css('display', 'none');
+    }
+</script>
+
+{% endblock %}
+</body>
+</html>

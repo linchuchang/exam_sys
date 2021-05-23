@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% block title %}
+    <title>校园考试管理系统</title>
+    {% endblock %}
+    {% block links %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% endblock %}
+  <!--移动设备优先-->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--引入bootstrap css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <!--引入jquery poppper.js bootstrap.js -->
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <!--顶部导航开始-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+        <a  class="navbar-brand text-success" href="#">校园考试</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link text-success" href="{% url 'index' %}">首页 <span class="sr-only">(current)</span></a>
+                </li>
+                <!--设置下拉菜单-->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-success" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        功能
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item text-success" href="#">成为机构</a>
+                        <a class="dropdown-item text-success" href="{% url 'upload' %}">导入题库</a>
+                        <a class="dropdown-item text-success" href="#">配置比赛</a>
+
+                        <!--分割线-->
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-success" href="#">Something else here</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled text-success" href="#" tabindex="-1" aria-disabled="true">关于</a>
+                </li>
+            </ul>
+
+            <!--个人用户中心 -->
+            <!--设置下拉菜单-->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-success" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <h2 class="user-name"></h2>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown"  name="user-info">
+                        <a class="dropdown-item text-success" href="{% url 'login' %}" >登录</a>
+                        <a class="dropdown-item text-success"  href="{% url 'register_s' %}">注册</a>
+                        <a class="dropdown-item text-success"  href="{% url 'logout' %}">注销</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-success" href="{% url 'profile_edit' %}">个人中心</a>
+                    </div>
+                </li>
+            <li class="nav-item">
+                <a class="btn btn-outline-success my-2" href="{% url 'login' %}" >登录</a>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-outline-success my-2" href="{% url 'register_s' %}">注册</a>
+            </li>
+        </div>
+    </nav>
+    <!--顶部导航结束-->
+    {% block mainbody %}
+
+    {% endblock %}
+
+</body>
+<script type="text/javascript">
+function getCookie(name)
+    {
+        var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
+        if(arr != null)
+            return unescape(arr[2]);
+        return false;
+    }
+	$(document).ready(function() {
+		//调用方法，获得取到的值
+		let email = getCookie("email");
+
+		let userName = getCookie("username");
+		if(userName != null && userName != ''){
+			$("h2[class$='user-name']").text(userName);
+		}
+	});
+</script>
+</html>

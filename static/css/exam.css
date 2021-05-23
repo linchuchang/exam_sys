@@ -1,0 +1,11 @@
+.hasBeenAnswer {
+	background: #5d9cec;
+	color:#fff;
+}
+h1 {text-align:center;}
+p.main {text-align:center;}
+body
+{
+	background-image:url('https://static.runoob.com/images/mix/gradient2.png');
+	background-repeat:repeat-x;
+}

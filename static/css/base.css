@@ -1,0 +1,58 @@
+.header {
+        position: absolute;
+        width:100%;
+        height:1200px;
+    }
+    .header-bg{
+        height: 650px;
+        width:100%;
+        position: absolute;
+        background-position: center,center;
+        background-size: cover;
+    }
+      #headerbg{
+          background-image: url("../image/headerbg.jpg");
+      }
+
+      .title-line {
+            width: 980px;
+            height: 28px;
+            border-bottom: 1px solid #ddd;
+            margin: 0 auto 28px;
+            text-align: center;
+        }
+        .title-line .tit {
+            height: 56px;
+            line-height: 56px;
+            margin: 0 auto;
+            padding: 0 20px;
+            font-size: 40px;
+            background: #fff;
+            text-align: center;
+        }
+
+        .login-box {
+            position: relative;
+            width: 980px;
+            margin: 0 auto;
+        }
+
+        .login-leftbg{
+            height: 650px;
+            width:100%;
+            position: absolute;
+            background-position: center,center;
+            background-size: cover;
+            background-image: url("../image/headerbg.jpg");
+        }
+        .mycheckbox{
+            margin-top:10px;
+            margin-left: 40px;
+            margin-bottom: 10px;
+            height: 10px;
+        }
+        .checkbox_font{
+            vertical-align:middle;
+            font-size: 10px;
+            margin-right: 20px
+        }
