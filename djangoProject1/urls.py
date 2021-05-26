@@ -40,4 +40,9 @@ urlpatterns = [
     # 配置试卷
     path('makepaper/', views.makepaper, name="makepaper"),
     path('create_paper/', views.create_Paper, name="create_paper"),
+    # 开始考试
+    path('startExam/', views.startExam, name='startExam'),
+    #显示成绩
+    path('showExam/', views.showExam, name='showExam'),
+    path('showGrade/', views.showGrade, name='showGrade'),
 ]

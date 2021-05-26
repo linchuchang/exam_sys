@@ -1,11 +1,11 @@
 import win32timezone
 from django.db import models
 
-SEX = (('male', '男'), ('female', '女'))
+SEX = (('男', '男'), ('女', '女'))
 # Create your models here.
 class Student(models.Model):
 
-    GRADE = (('one', '大一'), ('two', '大二'), ('three', '大三'), ('four', '大四'))
+    GRADE = (('大一', '大一'), ('大二', '大二'), ('大三', '大三'), ('大四', '大四'))
 
     student_number = models.CharField("学号", max_length=8, default='123')
     name = models.CharField("姓名", max_length=256, unique=False)
@@ -61,6 +61,18 @@ class Test_Questions(models.Model):
     def __str__(self):
         return '<%s:%s>' % (self.subject, self.title);
 
+class Class(models.Model):
+    class_number = models.IntegerField()
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, default='')
+    teacher = models.ManyToManyField(Teacher)
+
+    def __str__(self):
+        return '<%s>'%(self.class_number);
+    class Meta:
+        db_table = 'class'
+        verbose_name = '班级'
+        verbose_name_plural = verbose_name
+
 class Paper(models.Model):
     #题号pid 和题库为多对多的关系
     pid = models.ManyToManyField(Test_Questions)#多对多
@@ -69,6 +81,7 @@ class Paper(models.Model):
     subject = models.CharField('科目', max_length=20, default='')
     major = models.CharField('考卷适用专业', max_length=20)
     examtime = models.DateTimeField()
+    class_suit = models.ManyToManyField(Class)
 
     class Meta:
         db_table = 'paper'
@@ -77,5 +90,17 @@ class Paper(models.Model):
     def __str__(self):
         return self.papername;
 
+class Score(models.Model):
+    sid = models.ForeignKey(Student, on_delete=models.CASCADE, default='')
+    subject = models.CharField('科目', max_length=20, default='')
+    grade = models.IntegerField()
+
+    def __str__(self):
+        return '<%s:%s>'%(self.sid, self.grade);
+
+    class Meta:
+        db_table = 'grade'
+        verbose_name = '成绩'
+        verbose_name_plural = verbose_name
 
 

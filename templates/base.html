@@ -38,7 +38,7 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item text-success" href="#">成为机构</a>
                         <a class="dropdown-item text-success" href="{% url 'upload' %}">导入题库</a>
-                        <a class="dropdown-item text-success" href="#">配置比赛</a>
+                        <a class="dropdown-item text-success" href="{% url 'makepaper' %}">配置比赛</a>
 
                         <!--分割线-->
                         <div class="dropdown-divider"></div>
@@ -79,7 +79,8 @@
 
 </body>
 <script type="text/javascript">
-function getCookie(name)
+
+    function getCookie(name)
     {
         var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
         if(arr != null)

@@ -22,7 +22,7 @@
         </li>
 
         <li class="nav-item active">
-            <a class="nav-link"><h3>当前科目</h3></a>
+            <a class="nav-link"><h3>当前科目：{{ subject }}</h3></a>
         </li>
         <li style="position: fixed;right: 70px; font-size: 30px;color: #9fcdff"></li>
 
@@ -38,8 +38,8 @@
                         <h1>单选题</h1>
                         <div>
                             <div class="main">
-                            <span>共</span><i class="content_lit">10</i><span>题，</span>
-                            <span>合计</span><i class="content_fs">100</i><span>分</span>
+                            <span>共</span><i class="content_lit">{{ paper.first.pid.all|length }}</i><span>题，</span>
+                            <span>合计</span><i class="content_fs">{% widthratio paper.first.pid.all|length 1 10  %}</i><span>分</span>
                                 </div>
                         </div>
                         </div>
@@ -48,9 +48,9 @@
 
     <form action="/exam/" method="post">
         <div class="test_title">
-
+            <input type="hidden" value="{{ subject }}" name="subject">
         </div>
-    {% for item in questiones %}
+    {% for item in paper.first.pid.all %}
         <div>
     <tr>
         <td>({{ item.score }} 分){{ forloop.counter }}、{{item.title}}</td><br>
@@ -60,10 +60,10 @@
         <td>{{item.optionD}}</td><br>
     </tr>
     <tr>
-        <td><input type="radio" name="{{ forloop.counter }}" value="A">A</td>
-        <td><input type="radio" name="{{ forloop.counter }}" value="B">B</td>
-        <td><input type="radio" name="{{ forloop.counter }}" value="C">C</td>
-        <td><input type="radio" name="{{ forloop.counter }}" value="D">D</td>
+        <td><input type="radio" name="{{ item.Question_number }}" value="A">A</td>
+        <td><input type="radio" name="{{ item.Question_number }}" value="B">B</td>
+        <td><input type="radio" name="{{ item.Question_number }}" value="C">C</td>
+        <td><input type="radio" name="{{ item.Question_number }}" value="D">D</td>
         <br>
     </tr>
 </div>

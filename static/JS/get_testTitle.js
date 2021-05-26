@@ -8,8 +8,6 @@ function select_change(){
                 data: {'options': options.text()},
                 headers: {'X-CSRFToken': '{{ csrf_token }}'},
                 success: function (data) {
-                    // var ret = eval("("+data.responseText+")");
-                    // console.log(data)
                     str = ''
                     var select = document.getElementById("id_pid")
                     for (var i = 0; i < data.length; i++) {

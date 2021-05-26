@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block mainbody %}
+    <form method="post" action="/startExam/" >
+        考试科目:<select name="subject" id="select" onchange="show_subject_exam()">
+                <option value="" selected="">---------</option>
+                <option value="数学">数学</option>
+                <option value="教育知识与能力 ">教育知识与能力</option>
+                <option value="英语 ">英语</option>
+                <option value="政治 ">政治</option>
+                </select>
+    </form>
+        <div id="menu1" class="container"><br>
+      <h3>考试列表</h3>
+      <p></p>
+        <table class="table">
+            <thead>
+              <tr>
+                <th>姓名</th>
+                <th>考试科目</th>
+                  <th>考试时间</th>
+                  <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="paper-list">
+
+            </tbody>
+        </table>
+    <div id="main" style="width: 800px;height:500px;"></div>
+
+    <script type="text/javascript">
+        function show_subject_exam()
+        {
+            var options = $("#select option:selected");
+        $.ajax({
+                url: "/startExam/",
+                type: 'post',
+                dataType: 'json',
+                data: {'options': options.text()},
+                headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                success: function (data) {
+                    var tbody = document.getElementById("paper-list")
+                    for (var i = 0; i < data.length; i++) {
+                        tid = data[i].tid;
+                        subject = data[i].subject;
+                        examtime = data[i].examtime;
+                        var tr = document.createElement("tr")
+                        tr.className = 'table-info'
+                        var td1 = document.createElement("td")
+                        td1.innerText = data[i].tid;
+                        tr.appendChild(td1)
+                        var td2 = document.createElement("td")
+                        td2.innerText = data[i].subject;
+                        tr.appendChild(td2)
+                        var td3 = document.createElement("td")
+                        td3.innerText = data[i].examtime;
+                        tr.appendChild(td3)
+
+                        var td4 = document.createElement("td")
+                        str = '<td><a href="/exam/?subject='+subject+'&examtime='+examtime+'"'
+                        str += ' methods="post">\
+                     <button type="button" class="btn btn-primary"\
+                 data-toggle="collapse" data-target="#demo">开始考试</button></a>\
+                 </td>'
+                        td4.innerHTML = str
+                        tr.appendChild(td4)
+                        tbody.appendChild(tr)
+                    }
+                }
+            }
+                )
+        }
+
+
+    </script>
+    </div>
+{% endblock %}

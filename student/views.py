@@ -147,19 +147,28 @@ def register_t(request):
         return render(request, 'student/teacher_register.html', locals())
 
 def exam(request):
-    questiones = models.Test_Questions.objects.filter(subject="数学")
+    subject = request.GET.get('subject')
+    examtime = request.GET.get('examtime')
+    questiones = models.Test_Questions.objects.filter(subject=subject)
     n = len(questiones)
-
     if request.method == 'GET':
+        paper = models.Paper.objects.filter(subject=subject, examtime=examtime)
         # 拿到所有要求科目的试题，并发送给前端
         return render(request, 'exam.html', locals())
     if request.method == 'POST':
+        username = request.COOKIES.get('username')
+        student = models.Student.objects.get(name=username)
+        subject = request.POST.get("subject")
+        paper = models.Paper.objects.filter(subject=subject, examtime=examtime)
+        question_info = models.Paper.objects.filter(subject=subject).values("pid").values(
+                                "pid__Question_number", "pid__answer", "pid__score")
         score = 0
-        answer = request.POST
-        for i in range(n):
-            # id_temp = id[i]
-            if answer[str(i+1)] == questiones[i].answer:
-                score = score + questiones[i].score
+        for question in question_info:
+            qid = str(question['pid__Question_number'])
+            myAnswer = request.POST.get(qid)
+            if myAnswer == question['pid__answer']:
+                score = score + question['pid__score']
+        models.Score.objects.create(sid=student, subject=subject, grade=score)
         return render(request, 'calGrade.html', {'score': score})
 
 def calGrade(request):
@@ -192,13 +201,15 @@ def upload_file(request):
                 title = []
                 option = []
                 for i in range(n):
+                    answer = answer_list[i][-1]
+                    print(answer)
                     content = content_list[i]
                     pattern = re.compile(r"\d\W.*")
                     title.append(re.findall(pattern, content))
                     title[i] = re.sub(r'^\d\W', '', title[i][0])
                     option.append(re.findall(r'[A-D][.].*', content))
                     models.Test_Questions.objects.create(title=title[i], optionA=option[i][0], optionB=option[i][1],
-                                                         optionC=option[i][2], optionD=option[i][3], answer=answer_list[i],
+                                                         optionC=option[i][2], optionD=option[i][3], answer=answer,
                                                          subject='数学')
             return render(request, 'upload.html', locals())
         else:
@@ -256,7 +267,6 @@ def profile_edit(request):
                 user.save()
 
                 return response
-
 
 # 随机验证码生成
 def get_random_str(randomlength=8):
@@ -340,4 +350,60 @@ def create_Paper(request):
             message = '学生无法创建试卷'
         return render(request, 'makepaper.html', locals())
 
+def startExam(request):
+    if request.method == 'GET':
+        return render(request, 'student/startExam.html', locals())
+    else:
+        identity = request.COOKIES.get('identity')
+        if identity == 'student':
+            user = getUser_info(request)
+            subject = request.POST.get("options")
+            papers = models.Paper.objects.filter(subject=subject)
+            data = []
+            for paper in papers:
+                json_dict = {}
+                json_dict['tid'] = paper.tid.name
 
+                json_dict['subject'] = paper.subject
+                json_dict['examtime'] = paper.examtime
+                data.append(json_dict)
+            print(data)
+            return JsonResponse(data, safe=False)
+        else:
+            return render(request, 'student/startExam.html', locals())
+# 获得用户身份信息
+def getUser_info(request):
+    username = request.COOKIES.get('username')
+    identity = request.COOKIES.get('identity')
+    if identity == 'teacher':
+        user = models.Teacher.objects.filter(name=username)
+    else:
+        user = models.Student.objects.filter(name=username)
+    return user
+
+#教师查看成绩
+def showExam(request):
+    if request.method == 'GET':
+        identity = request.COOKIES.get('identity')
+        if identity == 'teacher':
+            user = getUser_info(request)[0]
+            paper = models.Paper.objects.filter(tid=user)
+            return render(request, 'showExam.html', locals())
+        else:
+            message = '只有教师才可以查看成绩'
+            return render(request, 'showExam.html', locals())
+
+
+def showGrade(request):
+    subject1 = request.GET.get('subject')
+    grade = models.Score.objects.filter(subject=subject1)
+    print(grade)
+    data1 = models.Score.objects.filter(subject=subject1, grade__lt=60).count()
+    data2 = models.Score.objects.filter(subject=subject1, grade__gte=60, grade__lt=70).count()
+    data3 = models.Score.objects.filter(subject=subject1, grade__gte=70, grade__lt=80).count()
+    data4 = models.Score.objects.filter(subject=subject1, grade__gte=80, grade__lt=90).count()
+    data5 = models.Score.objects.filter(subject=subject1, grade__gte=90).count()
+
+    data = {'data1': data1, 'data2': data2, 'data3': data3, 'data4': data4, 'data5': data5}
+    print(data)
+    return render(request, 'showGrade.html', {'grade': grade, 'data': data, 'subject': subject1})

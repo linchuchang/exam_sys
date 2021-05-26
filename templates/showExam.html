@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+    {% block title %}
+    <title>成绩</title>
+    {% endblock %}
+{% block mainbody %}
+<body>
+    <div id="menu1" class="container"><br>
+      <h3>成绩统计</h3>
+      <p></p>
+        <table class="table">
+            <thead>
+              <tr>
+                <th>姓名</th>
+                <th>考试科目</th>
+                  <th>考试时间</th>
+                  <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for paper1 in paper %}
+             <tr class="table-info">
+                  <td>{{ paper1.tid }}</td>
+                  <td>{{ paper1.subject }}</td>
+                  <td>{{ paper1.examtime }}</td>
+                 <td><a href="/showGrade/?subject={{ paper1.subject }}" methods="post">
+                     <button type="button" class="btn btn-primary"
+                 data-toggle="collapse" data-target="#demo">查看学生成绩</button></a>
+                 </td>
+            {#          <td><button class="btn btn-primary">开始考试</button></td>#}
+              </tr>
+
+            {% endfor %}
+            </tbody>
+        </table>
+        <h3 class="alert-danger" style="text-align: center">{{ message }}</h3>
+    </div>
+{% endblock %}
+</body>
+</html>
