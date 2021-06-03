@@ -31,6 +31,7 @@
         function show_subject_exam()
         {
             var options = $("#select option:selected");
+            $("#paper-list").children().filter("tr").remove();
         $.ajax({
                 url: "/startExam/",
                 type: 'post',

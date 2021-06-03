@@ -396,8 +396,8 @@ def showExam(request):
 
 def showGrade(request):
     subject1 = request.GET.get('subject')
-    grade = models.Score.objects.filter(subject=subject1)
-    print(grade)
+    grade = models.Score.objects.all().filter(subject=subject1).order_by("-grade")
+    # 传输给图标的数据
     data1 = models.Score.objects.filter(subject=subject1, grade__lt=60).count()
     data2 = models.Score.objects.filter(subject=subject1, grade__gte=60, grade__lt=70).count()
     data3 = models.Score.objects.filter(subject=subject1, grade__gte=70, grade__lt=80).count()
@@ -405,5 +405,4 @@ def showGrade(request):
     data5 = models.Score.objects.filter(subject=subject1, grade__gte=90).count()
 
     data = {'data1': data1, 'data2': data2, 'data3': data3, 'data4': data4, 'data5': data5}
-    print(data)
     return render(request, 'showGrade.html', {'grade': grade, 'data': data, 'subject': subject1})
